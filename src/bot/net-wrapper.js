@@ -15,7 +15,7 @@ const getResponse = (intent) => {
   let parsed = parseInt(intent);
 
   if (awnsers[parsed] == undefined) {
-    return awnsers.other[Math.floor(Math.random() * awnsers.other.length)];
+    return awnsers[2][Math.floor(Math.random() * awnsers[2].length)];
   }
   return awnsers[parsed][Math.floor(Math.random() * awnsers[parsed].length)];
 };
