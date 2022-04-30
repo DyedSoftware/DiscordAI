@@ -4,7 +4,8 @@
   "description": "DyedSoftware AI - Chatbot",
   "main": "bot/bot.js",
   "scripts": {
-    "test": "yarn run eslint src"
+    "test": "yarn run eslint src",
+    "start": "node ./src/bot/bot.js"
   },
   "author": "KlautNet",
   "license": "ISC",
