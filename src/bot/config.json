@@ -1,0 +1,8 @@
+{
+  "prefix": "$",
+  "conversationChannelId": "678710663677476887",
+  "trainChannelId": "969935405208182824",
+  "intervaltraining": false,
+  "trainOnBoot": false,
+  "iterations": 10000
+}
