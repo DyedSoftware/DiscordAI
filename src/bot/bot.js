@@ -5,25 +5,25 @@ const consoleLogger = require('../utils/consoleLogger')
 const netWrapper = require('./net-wrapper')
 const train = require('../training/train')
 const prefix = config.prefix;
-const client = new Discord.Client(); 
+const client = new Discord.Client();
+const fs = require('fs')
+const path = require('path')
+const net = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../training/data/net.json"),"utf8"))
 dotenv.config()
 
 client.on('ready', () => {
     if(config.trainOnBoot) {
         train.loadTrainingData();
     }
+    if(!(Object.entries(net).length === 0 || net === "")) {
+        netWrapper.net.fromJSON(
+            net
+        );
+    }
     consoleLogger.info(`Logged in as ${client.user.tag}!`)
     consoleLogger.info(`Online on ${client.guilds.cache.size} Guilds.`)
 
-    client.user.setPresence({
-        game: {
-            name: `Dyedsoftware AI | ${prefix}info`,
-            application_id: '001',
-            details: "Idle",
-            type: 0,
-            startTimestamp: new Date()
-        },
-    });
+    client.user.setActivity("DyedSoftwareAI | $info");
 });
 
 let status = 'input';
@@ -40,6 +40,8 @@ client.on('message', msg => {
     let command = args[0];
     let channel = msg.channel;
 	
+    let embed = new Discord.MessageEmbed();
+
 	if(channel.id === config.trainChannelId) {
 		if(status === 'input') {
             input = msg.content
@@ -54,7 +56,7 @@ client.on('message', msg => {
             .setFooter(`DyedSoftware | Open Source`,'https://i.imgur.com/aLaa4Qq.png')
             .setTitle('Categories');
             
-            channel.send("Please enter a category")
+            channel.send("Bitte gib eine Kategorie an!")
             let categories = netWrapper.getCategories();
 
             categories.map(category => {
@@ -66,7 +68,7 @@ client.on('message', msg => {
 		}else if(status === 'category') {
             
             if(!netWrapper.categoryexistsWithId(msg.content)) {
-                msg.reply(`Diese Kategorie existiert noch nicht! Erstelle sie mit ${prefix}createCategory`)
+                channel.send(`Diese Kategorie existiert noch nicht! Erstelle sie mit ${prefix}createCategory`)
                 return status = 'input'
             }else {
                 train.saveTrainingData(input, msg.content, output)
@@ -81,7 +83,7 @@ client.on('message', msg => {
             if(messageContent.startsWith(prefix)) {
                 if(args.length === 1) {
                     if(command === "info") {
-                        let embed = new Discord.MessageEmbed()
+
                         embed.setFooter(`DyedSoftware | Open Source`,'https://i.imgur.com/aLaa4Qq.png')
                         .setTitle("DyedSoftware AI")
                         .setDescription("Informationen über die DyedSofware AI")
@@ -96,47 +98,61 @@ client.on('message', msg => {
 
                     }else if(command === "train") {
                         if(!msg.member.hasPermission("ADMINISTRATOR")) return msg.reply("Dazu hast du keine Rechte!")
-                        let embed = new Discord.MessageEmbed()
-                        embed.setFooter(`DyedSoftware | Open Source`,'https://i.imgur.com/aLaa4Qq.png')
+                        
+                        embed
+                        .setFooter(`DyedSoftware | Open Source`,'https://i.imgur.com/aLaa4Qq.png')
                         .setTitle("DyedSoftware AI")
-                        .setDescription("Started training. This might take a while!")
-                        .addField("Training", "Started")
+                        .setDescription("Training gestarted. Das kann eine Weile dauern!")
+                        .addField("Training", "Gestarted")
                         .setColor('#ff0000')
                         channel.send(embed).then((message) => {
                             train.loadTrainingData()
-                            embed.fields[0] = {name: "Training", value: "Completed"}
+                            embed.fields[0] = {name: "Training", value: "Beendet"}
                             message.edit(embed.setColor('#00ff00').setDescription(""))
                         })
                         return 
     
-                    }else if(command === "stopInterval") {
+                    } else if(command === "hilfe") {
+                        embed
+                        .setTitle("Befehle")
+                        .addField(prefix + "hilfe", "Zeigt dir diese Nachricht an!", false)
+                        .addField(prefix + "createCategory <Name>", "Erstelle eine Kategorie", false)
+                        .addField(prefix + "info", "Zeigt dir allgemeine Infos", false)
+                        if(msg.member.hasPermission("ADMINISTRATOR")) {
+                            embed
+                            .addField(prefix + "train", "Trainiere die AI", false)
+                            .addField(prefix + "stopInterval", "Stoppe das Intervalltraining", false)
+                            .addField(prefix + "startInterval <Intervall (ms)> ", "Start das Intervalltraining", false)
+                        }
+                        channel.send(embed)
+                    } else if(command === "stopInterval") {
                         if(!msg.member.hasPermission("ADMINISTRATOR")) return msg.reply("Dazu hast du keine Rechte!")
                         
                         if(train.botConfig.intervaltraining) {
                             train.stopIntervalTraining()
-                            msg.reply("Deactivated Intervaltraining!")
+                            channel.send("Das Intervalltraining wurde deaktiviert!")
                         }else {
-                            msg.reply('Intervaltraining is already deactivated')
+                            channel.send('Das Intervalltraining wurde bereits deaktiviert!')
                         }
                        return
                     }else {
-                        msg.reply(`Unbekannter Command. Nutze ${prefix}hilfe`)
+                        channel.send(`Unbekannter Command. Nutze ${prefix}hilfe`)
                     }
                 }else if(args.length === 2) {
                     if(command === "startInterval") {
-                        if(!msg.member.hasPermission("ADMINISTRATOR")) return msg.reply("Dazu hast du keine Rechte!")
+                        if(!msg.member.hasPermission("ADMINISTRATOR")) return channel.send("Dazu hast du keine Rechte!")
                         
                         var interval =  parseInt(args[1])
 
                         if(typeof(interval) == 'number') {
                             if(!train.botConfig.intervaltraining) {
                                 train.activateIntervalTraining(interval)
-                                return msg.reply(`Started Intervaltraining Interval: ${interval} ms`)
+                                return channel.send(`Das Intervalltraining wurde aktiviert [${interval} ms]`)
                             }else {
-                                return msg.reply("Intervaltraining is already activated")
+                                return channel.send("Das Intervalltraining wurde bereits aktiviert!")
                             }
                         }else {
-                            return msg.reply('Bitte nutze $startInterval <Interval (ms)>')
+                            return channel.send('Bitte nutze **$startInterval <Interval (ms)>**')
                         }
                     }else if(command === "addCategory") {
                         
@@ -144,15 +160,15 @@ client.on('message', msg => {
 
                         if(!netWrapper.categoryexistsWithName(category)) {
                             netWrapper.addCategory(category)
-                            return msg.reply('Create category')
+                        return channel.send(`Die Kategorie **${category}** wurde erstell!`)
                         }else {
-                            return msg.reply(`Die Kategorie **${category}** existiert bereits!`)
+                            return channel.send(`Die Kategorie **${category}** existiert bereits!`)
                         }
                     }else {
-                        return msg.reply(`Unbekannter Command. Nutze ${prefix}hilfe`)
+                        return channel.send(`Unbekannter Command. Nutze ${prefix}hilfe`)
                     }
                 }else {
-                    return msg.reply(`Unbekannter Command. Nutze ${prefix}hilfe`)
+                    return channel.send(`Unbekannter Command. Nutze ${prefix}hilfe`)
                 }
                 
             }else {
@@ -163,11 +179,11 @@ client.on('message', msg => {
                     
                     return msg.channel.send(netWrapper.getResponse(netWrapper.net.run(sentence)));
                 }else {
-                    return msg.reply('I am not trained!')
+                    return channel.send('Ich wurde noch nicht trainiert!')
                 }
             }
         }else {
-            return msg.reply('I am currently training!')
+            return channel.send('Ich lerne gerade!')
         }
 	}
 })

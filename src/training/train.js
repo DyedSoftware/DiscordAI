@@ -110,7 +110,6 @@ const activateIntervalTraining = () => {
 const stopIntervalTraining = () => {
     if(intervalID != null) {
         clearInterval(intervalID);
-		console.log('Cleared Interval')
         intervalID = null;
     }
 	botConfig.intervaltraining = false;
