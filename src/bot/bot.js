@@ -56,7 +56,7 @@ client.on('message', msg => {
             .setFooter(`DyedSoftware | Open Source`,'https://i.imgur.com/aLaa4Qq.png')
             .setTitle('Categories');
             
-            channel.send("Bitte gib eine Kategorie an!")
+            channel.send("Bitte gib eine Kategorie an! Nutze **CANCEL** zum abbrechen.")
             let categories = netWrapper.getCategories();
 
             categories.map(category => {
@@ -65,14 +65,19 @@ client.on('message', msg => {
 
             return channel.send(embed)
 
-		}else if(status === 'category') {
+		}else if(status === 'category') {   
+            if(msg.content === "CANCEL") {
+                status = 'input'
+                channel.send('Vorgang wurde abgebrochen!')
+                return 
+            }
             
             if(!netWrapper.categoryexistsWithId(msg.content)) {
                 channel.send(`Diese Kategorie existiert noch nicht! Erstelle sie mit ${prefix}createCategory`)
                 return status = 'input'
             }else {
                 train.saveTrainingData(input, msg.content, output)
-                channel.send('Saved')
+                channel.send('Gespeichert!')
                 return status = 'input'
             }
         }
