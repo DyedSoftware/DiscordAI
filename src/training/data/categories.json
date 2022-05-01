@@ -5,9 +5,13 @@
     { "3": "wetter" },
     { "4": "sport" },
     { "5": "beleidigung" },
-    { "6": "verabschiedung" },
+    { "6": "gefühl" },
     { "7": "programmieren" },
     { "8": "ich (ai)" },
-    { "9": "andere" }
+    { "9": "andere" },
+    {"10": "zustimmung"},
+    {"11": "ablehnung"},
+    {"12": "frage"},
+    {"13": "lachen"}
   ]
 }

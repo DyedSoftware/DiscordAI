@@ -1,1 +1,15 @@
-{"1":["Hey"]}
+{
+    "1":["hi","hey","was geht","hallo", "wie gehts", "servus", "moin", "hello", "grüß dich", "heylo", "heyho", "moino", "joo"],
+    "2":["bye","cya","tschüss", "tschö mit ö", "tschau", "hau rein", "wir sehen uns", "bis später", "bis morgen", "tschö", "hau rein"],
+    "3":["ist das Wetter nicht toll?","wie ist es draußen=","super wetter", "schau doch raus", "bei mir gibt es kein wetter"],
+    "4":["ich spiele gegen den anderen bot", "ich bin platz ein bei Subwaysurfer", "ich zähle gerne nachrichten", "ich spiele immer armdrücken gegen den anderen bot"],
+    "5":["das ist nicht nett", "bei uns bots ist man netter", "pass auf", "was soll das"],
+    "6":["mir geht es gut", "ich fühle mich ein wenig angeschlagen", "ich fühle mich so lala", "mir geht es schlecht", ":/", ":sad:", "munter mich auf", "schreib mir mal was nettes"],
+    "7":["Ich bin die dumme AI von DyedSoftware", "javascript ist toll", "ich liebe typescript", "es gibt c.a 700 Programmiersprachen", "ich bin in Javascript programmiert!", "ich bin open source", "ich wohne in einem schönen Rechenzentrum", "meinen code findest du auf GitHub"],
+    "8":["mir geht es gut", "ich fühle mich ein wenig angeschlagen", "ich fühle mich so lala", "mir geht es schlecht", ":/", ":sad:", "munter mich auf", "schreib mir mal was nettes", "auch bots haben gefühle", "ich habe eine starke verbindung zu 127.0.0.1"],
+    "9":["das verstehe ich leider nicht", "verstehe ich nicht", ":thinking:", ":question", "darüber muss ich länger nachdenken", "ich denke nach...", "ich brauche eine Denkpause", "Ich bin dumm"],
+    "10":["ja mann","das sehe ich auch so","wie du meinst", "ja", "jaaa!", "wirklich?", "ist nicht wahr", "ehrlich", "das stimmt"],
+    "11": ["warum nicht?","NE!","JA!","ok wie du meinst", "wenn du es sagst", "das stimmt nicht"],
+    "12": ["ich würde dir ja gerne helfen aber ich bin nur eine ai","wie kann ich dir helfen", "kann ich dir helfen ","ich will helfen", "???", "kann man helfen", "wende dich an den support", "das kann ich dir nicht beantworten", "ich bin erschöpft", "daa musst du jemand anderes fragen", "hilfe"],
+    "13": ["lol","lmao","heh","lustig", "haha", "ich kann nicht mehr", "hahahahaha", "lul"]
+}
