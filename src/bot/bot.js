@@ -30,6 +30,15 @@ let status = 'input';
 let input = '';
 let output = '';
 
+client.on('messageDelete', msg => {
+    if(msg.channel.id === config.trainChannelId) {
+        if(status === 'output' || status === 'category') {
+            status = 'input'
+            msg.channel.send(`Der Vorgang wurde abgebrochen, da ${msg.author} seine Nachricht gelöscht hat.`)
+        }
+    }
+})
+
 client.on('message', msg => {
     
     var sender = msg.author;
